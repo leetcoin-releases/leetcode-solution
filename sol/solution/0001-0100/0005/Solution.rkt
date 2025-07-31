@@ -1,0 +1,18 @@
+(define (longest-palindrome s)
+  (let ([n (string-length s)]
+        [start 0]
+        [max-len 1])
+    (for ([i (in-range n)])
+      (let loop1 ([left i] [right i])
+        (when (and (>= left 0) (< right n) (char=? (string-ref s left) (string-ref s right)))
+          (when (> (- (+ right 1) left) max-len)
+            (set! start left)
+            (set! max-len (- (+ right 1) left)))
+          (loop1 (- left 1) (+ right 1))))
+      (let loop2 ([left i] [right (+ i 1)])
+        (when (and (>= left 0) (< right n) (char=? (string-ref s left) (string-ref s right)))
+          (when (> (- (+ right 1) left) max-len)
+            (set! start left)
+            (set! max-len (- (+ right 1) left)))
+          (loop2 (- left 1) (+ right 1)))))
+    (substring s start (+ start max-len))))
