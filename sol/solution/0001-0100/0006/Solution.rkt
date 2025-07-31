@@ -1,0 +1,15 @@
+(define (convert s numRows)
+  (if (or (= numRows 1) (<= (string-length s) numRows))
+      s
+      (let loop ((chars (string->list s))
+                 (rows (make-vector numRows ""))
+                 (cur 0)
+                 (dir 1))
+        (if (null? chars)
+            (apply string-append (vector->list rows))
+            (begin
+              (vector-set! rows cur (string-append (vector-ref rows cur) (string (car chars))))
+              (let ((new-dir (cond ((= cur 0) 1)
+                                   ((= cur (- numRows 1)) -1)
+                                   (else dir))))
+                (loop (cdr chars) rows (+ cur new-dir) new-dir)))))))
