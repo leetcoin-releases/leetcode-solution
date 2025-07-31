@@ -1,0 +1,30 @@
+(define/contract (find-median-sorted-arrays nums1 nums2)
+  (-> (listof exact-integer?) (listof exact-integer?) flonum?)
+  ;; Ensure nums1 is the smaller array
+  (define (binary-search-median a b)
+    (define m (length a))
+    (define n (length b))
+    (define imin 0)
+    (define imax m)
+    (define half-len (quotient (+ m n 1) 2))
+    (let loop ((imin imin) (imax imax))
+      (if (> imin imax)
+          (error "Invalid input arrays")
+          (let* ((i (quotient (+ imin imax) 2))
+                 (j (- half-len i))
+                 (a-left (if (= i 0) -inf.0 (list-ref a (- i 1))))
+                 (a-right (if (= i m) +inf.0 (list-ref a i)))
+                 (b-left (if (= j 0) -inf.0 (list-ref b (- j 1))))
+                 (b-right (if (= j n) +inf.0 (list-ref b j))))
+            (cond
+              [(> a-left b-right) (loop imin (- i 1))]
+              [(> b-left a-right) (loop (+ i 1) imax)]
+              [else
+               (define max-of-left (max a-left b-left))
+               (define min-of-right (min a-right b-right))
+               (if (odd? (+ m n))
+                   (exact->inexact max-of-left)
+                   (/ (+ max-of-left min-of-right) 2.0))])))))
+  (if (> (length nums1) (length nums2))
+      (binary-search-median nums2 nums1)
+      (binary-search-median nums1 nums2)))
