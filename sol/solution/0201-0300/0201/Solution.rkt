@@ -1,0 +1,5 @@
+(define (range-bitwise-and left right)
+  (let loop ((l left) (r right))
+    (if (< l r)
+        (loop l (bitwise-and r (- r 1)))
+        r)))
