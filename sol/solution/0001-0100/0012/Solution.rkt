@@ -1,0 +1,15 @@
+(define (int-to-roman num)
+  (define pairs
+    '((1000 . "M") (900 . "CM") (500 . "D") (400 . "CD")
+      (100 . "C") (90 . "XC") (50 . "L") (40 . "XL")
+      (10 . "X") (9 . "IX") (5 . "V") (4 . "IV") (1 . "I")))
+  (define (helper n lst acc)
+    (if (or (zero? n) (null? lst))
+        acc
+        (let* ((pair (car lst))
+               (val (car pair))
+               (sym (cdr pair)))
+          (if (>= n val)
+              (helper (- n val) lst (string-append acc sym))
+              (helper n (cdr lst) acc)))))
+  (helper num pairs ""))
